@@ -9,9 +9,11 @@ import * as Animatable from 'react-native-animatable';
 import { ChangeFontColor } from "../../../utils/conversation"
 var avatar1 = require("../../../res/images/avatar1.png")
 
-_renderTextTray = (Fontcolor, SetFontColor) => {
+_renderTextTray = (Fontcolor, SetFontColor, fontFamily, SetFontFamily) => {
+  let fonts =[null, "NK57MonospaceSeRg-Regular","Scriptina"]
 
   return (
+
     <View>
       <Row style={styles.color_container}>
         <Button primary style={[styles.fontColorBtn]} onPress={() => SetFontColor("blue")} ></Button>
@@ -22,13 +24,11 @@ _renderTextTray = (Fontcolor, SetFontColor) => {
         <Button success style={[styles.fontColorBtn]} onPress={() => SetFontColor("green")} ></Button>
         <Icon active name="clipboard" style={styles.sendIcon} />
 
-
-
       </Row>
       <Item style={styles.input_container}>
         <Icon active name='camera' style={styles.sendIcon} />
-        <Icon active name="color-wand" style={styles.sendIcon} />
-        <Input style={[styles.chatTextBox, { color: Fontcolor }]} placeholder="Type your message here" />
+        <Icon active name="color-wand" style={styles.sendIcon} onPress={()=>{{SetFontFamily((fontFamily + 1) %3 )}}} />
+        <Input style={[styles.chatTextBox, { color: Fontcolor, fontFamily:fonts[fontFamily] }]} placeholder="Type your message here" />
         <Icon active name='send' style={styles.sendIcon} />
       </Item>
     </View>
@@ -45,8 +45,10 @@ _renderContent = () => {
 }
 
 const ChatPage = (props) => {
-  let [fontColor, SetFontColor] = useState("pink")
 
+  
+  let [fontColor, SetFontColor] = useState("pink")
+  let [fontFamily, SetFontFamily] = useState(0)
 
   const dataArray = [
     {},
@@ -92,7 +94,7 @@ const ChatPage = (props) => {
 
 
         <Item last={true} underline={false} bordered={false} style={styles.footer}>
-          <Accordion dataArray={dataArray} expanded={false} animation={true} renderHeader={() => this._renderTextTray(fontColor, SetFontColor)} renderContent={this._renderContent}
+          <Accordion dataArray={dataArray} expanded={false} animation={true} renderHeader={() => this._renderTextTray(fontColor, SetFontColor, fontFamily, SetFontFamily)} renderContent={this._renderContent}
 
           />
         </Item>
