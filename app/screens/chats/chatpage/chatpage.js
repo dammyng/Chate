@@ -47,7 +47,7 @@ _renderContent = () => {
 const ChatPage = (props) => {
 
   
-  let [fontColor, SetFontColor] = useState("pink")
+  let [fontColor, SetFontColor] = useState("black")
   let [fontFamily, SetFontFamily] = useState(0)
 
   const dataArray = [

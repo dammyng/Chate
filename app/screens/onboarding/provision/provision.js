@@ -11,21 +11,32 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Query, Mutation } from "react-apollo";
 import gql from 'graphql-tag'
 import { provision } from "../../../api/user"
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, { DURATION } from 'react-native-easy-toast'
 const LoginScreen = (props) => {
 
   let [loading, setLoading] = useState(false)
+  let [email, setEmail] = useState("")
 
   setUpUser = async () => {
-    setLoading(true)
-    let result = await provision({ email: "kamilus" });
-
-    if(result.status == true){
-    }else{
-      this.toast.show(result.body);
-    }
+    if (validateEmail(email) == true) {
+      setLoading(true)
+      let result = await provision({ email: email });
+      if (result.status == true) {
+        props.navigation.push("ChatList")
+      } else {
+        this.toast.show(result.body);
+      }
       setLoading(false)
-    
+    } else {
+      setEmail("'" + email + "'" + " is not a valid Email address")
+    }
+  }
+
+
+
+  function validateEmail(e) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(e).toLowerCase());
   }
 
 
@@ -33,7 +44,7 @@ const LoginScreen = (props) => {
     <Container>
       <Content>
         <Item style={styles.pickerWrapper}>
-          <Input style={styles.phonePicker} keyboardType="email-address" placeholder="Enter Email Address" />
+          <Input style={styles.phonePicker} value={email} keyboardType="email-address" placeholder="Enter Email Address" onChangeText={(text) => { setEmail(text) }} />
         </Item>
 
         <Spinner
@@ -42,16 +53,16 @@ const LoginScreen = (props) => {
         />
 
 
-<Button small onPress={() => { setUpUser() }}style={{alignSelf:"center"}} >
+        <Button small onPress={() => { setUpUser() }} style={{ alignSelf: "center" }} >
           <Text>Continue</Text>
 
         </Button>
-       
 
 
-                 <Toast position={"center"} textStyle={styles.errorToast}  ref={(ref) => { this.toast = ref; }}
 
-/>
+        <Toast position={"center"} textStyle={styles.errorToast} ref={(ref) => { this.toast = ref; }}
+
+        />
       </Content>
     </Container>
   );
