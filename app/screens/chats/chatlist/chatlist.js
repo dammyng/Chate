@@ -60,7 +60,7 @@ export default class ClassList extends React.Component {
               <View style={[styles.search_wrapper]}>
                 <TextInput placeholder="Search" style={[styles.f1, styles.searchInput]} />
                 <Icon
-                  onPress={() => props.navigation.push("Settings")}
+                  onPress={() => this.props.navigation.push("Settings")}
                   name="ios-settings"
                   style={styles.settings_icon}
                 />
