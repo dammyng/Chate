@@ -5,10 +5,9 @@ import { Image, View, SafeAreaView, StatusBar } from 'react-native';
 import { Container, Card, CardItem, Body, Title, Text, Left, Right, Thumbnail, Content, Button, Item, Switch, ListItem, Icon, List, Header } from "native-base";
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { styles } from './settingstyle';
-import * as Animatable from 'react-native-animatable';
 var avatar1 = require("../../../res/images/avatar1.png")
 import { ThemeContext } from "../../../../App"
-
+import {StatusStyle} from "../../../utils/theme"
 export default class SettingScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -18,8 +17,7 @@ export default class SettingScreen extends React.Component {
   }
 
   static navigationOptions = ({ navigation }) => {
-    var { params = {} } = navigation.state
-    console.log(navigation)
+    //var { params = {} } = navigation.state
     return {
       header: null
     };
@@ -37,14 +35,7 @@ export default class SettingScreen extends React.Component {
     switchTheme()
   }
 
-  statusStyle = (contextState) => {
-    if (contextState.isDark == true) {
-      return "light-content"
-    } else {
-      return "dark-content"
-
-    }
-  }
+ 
 
   render() {
     return (
@@ -52,11 +43,9 @@ export default class SettingScreen extends React.Component {
         {({ contextState, switchTheme }) => {
           return (
             <Container style={[contextState.theme,]}>
-
-              <Header iosBarStyle={this.statusStyle(contextState)} style={{ backgroundColor: "transparent" }} >
-
+              <Header iosBarStyle={StatusStyle(contextState)} style={{ backgroundColor: "transparent" }} >
                 <Left>
-                  <Button transparent>
+                  <Button transparent onPress={()=>{this.props.navigation.goBack()}}>
                     <Icon name='arrow-back' style={[contextState.theme]} />
                     <Text style={[contextState.theme]}>Back</Text>
                   </Button>
@@ -64,7 +53,6 @@ export default class SettingScreen extends React.Component {
                 <Body>
                 </Body>
                 <Right>
-
                 </Right>
               </Header>
               <Content>

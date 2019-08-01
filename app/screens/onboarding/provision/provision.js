@@ -2,21 +2,19 @@
 
 import React, { useState } from "react";
 import { Image } from 'react-native';
-import { Container, Card, CardItem, Body, Title, Text, Left, Right, Thumbnail, Content, Button, Item, Form, Label, Input } from "native-base";
+import { Container, Card, CardItem, Body,Icon, Title, Text, Left, Right, Thumbnail,Header, Content, Button, Item, Form, Label, Input } from "native-base";
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { styles } from './provisionstyle';
-import PhoneInput from 'react-native-phone-input'
 import Spinner from 'react-native-loading-spinner-overlay';
-
-import { Query, Mutation } from "react-apollo";
-import gql from 'graphql-tag'
 import { provision } from "../../../api/user"
 import Toast, { DURATION } from 'react-native-easy-toast'
+import { ThemeContext } from "../../../../App"
+import {StatusStyle} from "../../../utils/theme"
+
 const LoginScreen = (props) => {
 
   let [loading, setLoading] = useState(false)
   let [email, setEmail] = useState("")
-
   setUpUser = async () => {
     if (validateEmail(email) == true) {
       setLoading(true)
@@ -32,6 +30,7 @@ const LoginScreen = (props) => {
     }
   }
 
+ 
 
 
   function validateEmail(e) {
@@ -41,39 +40,54 @@ const LoginScreen = (props) => {
 
 
   return (
-    <Container>
-      <Content>
-        <Item style={styles.pickerWrapper}>
-          <Input style={styles.phonePicker} value={email} keyboardType="email-address" placeholder="Enter Email Address" onChangeText={(text) => { setEmail(text) }} />
-        </Item>
-
-        <Spinner
-          visible={loading}
-          textContent={'Loading...'}
-        />
-
-
-        <Button small onPress={() => { setUpUser() }} style={{ alignSelf: "center" }} >
-          <Text>Continue</Text>
-
-        </Button>
-
-
-
-        <Toast position={"center"} textStyle={styles.errorToast} ref={(ref) => { this.toast = ref; }}
-
-        />
-      </Content>
-    </Container>
+    <ThemeContext.Consumer>         
+    {({ contextState}) => {
+  
+      return (
+        <Container style={[contextState.theme,]}>
+        <Header iosBarStyle={StatusStyle(contextState)} style={{ backgroundColor: "transparent" }} >
+                <Left>
+                  <Button transparent onPress={()=>{this.props.navigation.goBack()}}>
+                    <Icon name='arrow-back' style={[contextState.theme]} />
+                    <Text style={[contextState.theme]}>Back</Text>
+                  </Button>
+                </Left>
+                <Body>
+                </Body>
+                <Right>
+                <Button hasText transparent onPress={() => props.navigation.push("ChatList")} >
+        <Text>Done</Text>
+      </Button>
+                </Right>
+              </Header>
+        <Content>
+          <Item style={styles.pickerWrapper}>
+            <Input style={[contextState.theme,styles.phonePicker]} value={email} keyboardType="email-address" placeholder="Enter Email Address" onChangeText={(text) => { setEmail(text) }} />
+          </Item>
+          <Spinner
+            visible={loading}
+            textContent={'Loading...'}
+          />
+          <Button small onPress={() => { setUpUser() }} style={{ alignSelf: "center" }} >
+            <Text>Continue</Text>
+          </Button>
+          <Toast position={"center"} textStyle={styles.errorToast} ref={(ref) => { this.toast = ref; }}
+          />
+        </Content>
+      </Container>
+      )
+    }} 
+    </ThemeContext.Consumer>
   );
 };
 
 LoginScreen.navigationOptions = ({ navigation }) => {
+ 
+  let themeParams  = navigation.getParam("appTheme") || {}
+  
   return {
-    headerRight: (
-      <Button hasText transparent onPress={() => navigation.push("ChatList")} >
-        <Text>Done</Text>
-      </Button>)
+     header: null
+
   }
 }
 

@@ -1,10 +1,12 @@
 import React from "react";
-import { Container, Card, CardItem, Body, Title, Text, Left, Right, Thumbnail, Content, Button, Item, Icon, Input, List, ListItem } from "native-base";
+import { Container, Card, CardItem, Body, Title, Text, Left, Right, Thumbnail,Header, Content, Button, Item, Icon, Input, List, ListItem } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { styles } from "./chatliststyle";
 import { TextInput, View, ScrollView } from "react-native";
 import { getUser } from "../../../api/user"
 import {defaultContactList} from "../../../utils/index"
+import { ThemeContext } from "../../../../App"
+import {StatusStyle} from "../../../utils/theme"
 
 var avatar1 = require("../../../res/images/avatar1.png");
 var avatar2 = require("../../../res/images/avatar2.png");
@@ -16,6 +18,13 @@ export default class ClassList extends React.Component {
       available: [], notAvailable: []
     }
   }
+
+  static navigationOptions = ({ navigation }) => {
+    let themeParams  = navigation.getParam("appTheme") || {}
+    return {
+header:null    }
+  }
+  
 
    async componentDidMount() {
 
@@ -53,10 +62,29 @@ export default class ClassList extends React.Component {
   render() {
     let { available } = this.state
     return (
-      <Container>
+       <ThemeContext.Consumer>
+        {({ contextState, switchTheme }) => {
+          if(this.props.navigation.getParam("appTheme") != contextState){
+        this.props.navigation.setParams({"appTheme": contextState})
+      }
+          return(
+      <Container style={[contextState.theme,]}>
+      <Header iosBarStyle={StatusStyle(contextState)} style={{ backgroundColor: "transparent" }} >
+                <Left>
+                  <Button transparent onPress={()=>{this.props.navigation.goBack()}}>
+                    <Icon name='arrow-back' style={[contextState.theme]} />
+                    <Text style={[contextState.theme]}>Back</Text>
+                  </Button>
+                </Left>
+                <Body>
+                </Body>
+                <Right>
+               
+                </Right>
+              </Header>
         <Card>
           <CardItem style={[styles.cardItem]}>
-            <Body>
+            <Body style={[styles.p3]}>
               <View style={[styles.search_wrapper]}>
                 <TextInput placeholder="Search" style={[styles.f1, styles.searchInput]} />
                 <Icon
@@ -72,6 +100,8 @@ export default class ClassList extends React.Component {
           <ChatItems available={available} goToChat = {this.goToChat}></ChatItems>
         </Content>
       </Container>
+          )}}
+      </ThemeContext.Consumer>
     )
   }
 };

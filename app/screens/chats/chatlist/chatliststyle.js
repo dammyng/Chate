@@ -6,7 +6,7 @@ import {
 export const styles = StyleSheet.create({
     center: {
         alignSelf: "center"
-    },
+    },p5:{padding:5},p3:{padding:3},m3:{margin:3},
     f1: {
         flex: 1
     },

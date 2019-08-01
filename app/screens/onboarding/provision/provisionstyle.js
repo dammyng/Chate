@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
         padding: 10,
         borderBottomWidth: .5,
         borderColor: "lightgray",
-        color: 'black',
         textAlign: "center"
     },pickerWrapper:{
         marginLeft:20, margin:20
