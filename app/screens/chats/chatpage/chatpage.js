@@ -40,6 +40,7 @@ _renderContent = () => {
     <View
       style={styles.sketch_canvas}
     >
+    
     </View>
   );
 }

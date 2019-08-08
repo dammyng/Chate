@@ -5,9 +5,10 @@ import { Image, View, SafeAreaView, StatusBar } from 'react-native';
 import { Container, Card, CardItem, Body, Title, Text, Left, Right, Thumbnail, Content, Button, Item, Switch, ListItem, Icon, List, Header } from "native-base";
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { styles } from './settingstyle';
-var avatar1 = require("../../../res/images/avatar1.png")
 import { ThemeContext } from "../../../../App"
-import {StatusStyle} from "../../../utils/theme"
+import { StatusStyle } from "../../../utils/theme"
+var avatar1 = require("../../../res/images/avatar1.png")
+
 export default class SettingScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -35,7 +36,16 @@ export default class SettingScreen extends React.Component {
     switchTheme()
   }
 
- 
+  openPhoto = () => {
+    console.log("B");
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      console.log(image);
+    });
+  }
 
   render() {
     return (
@@ -45,7 +55,7 @@ export default class SettingScreen extends React.Component {
             <Container style={[contextState.theme,]}>
               <Header iosBarStyle={StatusStyle(contextState)} style={{ backgroundColor: "transparent" }} >
                 <Left>
-                  <Button transparent onPress={()=>{this.props.navigation.goBack()}}>
+                  <Button transparent onPress={() => { this.props.navigation.goBack() }}>
                     <Icon name='arrow-back' style={[contextState.theme]} />
                     <Text style={[contextState.theme]}>Back</Text>
                   </Button>
@@ -60,7 +70,9 @@ export default class SettingScreen extends React.Component {
                   <Left>
                   </Left>
                   <Body>
-                    <Thumbnail source={avatar1} />
+                    <Item onPress={() => { console.log("A"); this.openPhoto() }}>
+                      <Thumbnail source={avatar1} />
+                    </Item>
                     <Item style={styles.pt10}>
                       <Text style={[contextState.theme]}>Kumar Pratik </Text>
                       <Text note> +234666777777 </Text>

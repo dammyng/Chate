@@ -40,7 +40,13 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Helps you get your contacts registered on the app</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string>Pick picture for use within the app</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Pick picture for use within the app</string>
+		<key>NSMicrophoneUsageDescription</key>
+	<string>This app use the media library</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

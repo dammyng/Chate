@@ -21,7 +21,7 @@ var routeArray = {
 var navigations = createStackNavigator(
        routeArray,
     {
-        initialRouteName: "Welcome"
+        initialRouteName: "Settings"
     }
 )
 
