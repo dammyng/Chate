@@ -38,6 +38,7 @@ header:null    }
 
   updateAvailableList = async (element) => {
     let result = await getUser(element.email)
+
     if (result.body != null) {
       this.setState(state => {
         available = [...state.available, element]
@@ -110,7 +111,6 @@ header:null    }
 function ChatItems(props) {
   let available = props.available
   let goToChat = props.goToChat
-  console.log(available)
   return (
     <List>
       {available.map(item => {

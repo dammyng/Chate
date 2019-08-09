@@ -6,8 +6,23 @@ import { Container, Card, CardItem, Body, Title, Text, Left, Right, Thumbnail, C
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { styles } from './chatpagestyle';
 import * as Animatable from 'react-native-animatable';
-import { ChangeFontColor } from "../../../utils/conversation"
 var avatar1 = require("../../../res/images/avatar1.png")
+import { Query , Subscription} from 'react-apollo'
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+
+const MESSAGE_CREATED = gql`
+ subscription{
+  chat(where:{ mutation_in:[CREATED]}){
+    node{
+      id
+     	content
+      from
+    }
+  }
+}
+`;
+
 
 _renderTextTray = (Fontcolor, SetFontColor, fontFamily, SetFontFamily) => {
   let fonts =[null, "NK57MonospaceSeRg-Regular","Scriptina"]
@@ -55,8 +70,6 @@ const ChatPage = (props) => {
     {},
   ];
 
-
-
   return (
 
 
@@ -76,7 +89,10 @@ const ChatPage = (props) => {
       </Header>
       <Item style={[styles.col_direction, styles.page_content]}>
         <Content padder style={[styles.f1, { width: "100%" }]}>
-          <List>
+        <Query query={ALL_CHATS_QUERY}>
+        {({ data,error, loading, subscribeToMore }) => {alert(JSON.stringify(error)) 
+return(
+  <List>
             <ListItem noBorder avatar style={[styles.mb10, styles.chatItem]}>
 
               <Body style={styles.chatBody}>
@@ -90,7 +106,9 @@ const ChatPage = (props) => {
                 <Text style={styles.chatBodyTextMy} note>Doing what you like will always keep you happy . .</Text>
               </Body>
             </ListItem>
-          </List>
+          </List>)
+        }}
+  </Query>
         </Content>
 
 
@@ -104,4 +122,15 @@ const ChatPage = (props) => {
   );
 };
 
-export default ChatPage;
+
+const ALL_CHATS_QUERY = gql`
+query{
+  chats{
+    id
+    content
+  }
+}
+`;
+
+
+export default ChatPage

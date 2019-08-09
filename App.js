@@ -8,13 +8,40 @@ import {
 import { general, dark, light } from './theme';
 import Routes from "./app/routes"
 import ApolloClient from "apollo-boost";
-import { split } from 'apollo-link';
-import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
-import { getMainDefinition } from 'apollo-utilities';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { inDarkMode, toggleMode } from "./app/utils/storage"
 import { ApolloProvider } from "react-apollo";
+import {SubscriptionClient, addGraphQLSubscriptions} from 'subscriptions-transport-ws';
+import { HttpLink } from 'apollo-link-http';
 
+
+import { split } from 'apollo-link';
+import { getMainDefinition } from 'apollo-utilities';
+
+const httpLink = new HttpLink({ uri: 'http://localhost:4466' });
+
+const wsLink = new WebSocketLink({
+  uri: 'ws://localhost:4466',
+  options: {
+    reconnect: true
+  }
+});
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpLink,
+);
+
+
+const client = new ApolloClient({
+link,  cache: new InMemoryCache()
+})
+console.log(client)
 
 
 const themes = {
@@ -32,39 +59,7 @@ export const ThemeContext = React.createContext();
 
 
 
-
-
-const httpLink = new HttpLink({
-  uri: "http://localhost:4466/"
-});
-
-const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4466/`,
-  options: {
-    reconnect: true
-  }
-});
-const client = new ApolloClient({
-  uri: wsLink
-})
-const link = split(
-  // split based on operation type
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    );
-  },
-  wsLink,
-  httpLink,
-);
-
-
-
-
 export default class App extends React.Component {
-
   constructor(props){
     super(props)
     this.state ={
