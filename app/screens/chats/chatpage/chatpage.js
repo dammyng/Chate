@@ -89,6 +89,8 @@ const ChatPage = (props) => {
       </Header>
       <Item style={[styles.col_direction, styles.page_content]}>
         <Content padder style={[styles.f1, { width: "100%" }]}>
+    
+      
         <Query query={ALL_CHATS_QUERY}>
         {({ data,error, loading, subscribeToMore }) => {alert(JSON.stringify(error)) 
 return(

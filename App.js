@@ -21,15 +21,16 @@ import { getMainDefinition } from 'apollo-utilities';
 
 const httpLink = new HttpLink({ uri: 'http://localhost:4466' });
 
-const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:4466',
-  options: {
+const wsLink = new SubscriptionClient('ws://localhost:4466',
+  {
     reconnect: true
   }
-});
+);
+
+
 
 const link = split(
-  ({ query }) => {
+    ({ query }) => {
     const { kind, operation } = getMainDefinition(query);
     return kind === 'OperationDefinition' && operation === 'subscription';
   },
@@ -39,9 +40,8 @@ const link = split(
 
 
 const client = new ApolloClient({
-link,  cache: new InMemoryCache()
+  wsLink
 })
-console.log(client)
 
 
 const themes = {
